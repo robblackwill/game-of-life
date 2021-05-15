@@ -71,26 +71,69 @@
 
     function tick(){
 
-        let w=canvas.width 
+        let w=canvas.width //width of the 'screen in pixels' (it's W pixels in a row)
 
         //write a for "i" loop - which goes through every cell in cells
         //count the 'alive' neighbours of the i'th cell
-        //based upon whether the (i'th) cell is alive, and the count of it's live neigbours - set next[i] to "dead or alive" 
-
-
-        //Your code goes here :-
-
+        //based upon whether the (i'th) cell is alive, 
+        //and the count of it's live neigbours - set next[i] to "dead or alive" 
 
 
 
-        //now we copy the next generation into the current for display (see animate())
-        for (let i=0;i<next.length;i++){
-            cells[i]=next[i]
+        for (let i = 0; i<cells.length; i++) {
+            //count the 'alive' neighbours of i'th cell
+            let liveN = 0; // Live neighbours
+            if(cells[i+1] == alive) { //check cell on the right to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i-1] == alive) { //check cell on the left to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i-w] == alive) { //check cell on the north to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i+w] == alive) { //check cell on the south to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i-w+1] == alive) { //check cells on the north-east to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i-w-1] == alive) { //check cells on the north-west to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i+w+1] == alive) { //check cells on the south-east to see if alive add to liveN counter
+                liveN++
+            }
+            if(cells[i+w-1] == alive) { //check cells on the south-west to see if alive add to liveN counter
+                liveN++
+            }
+
+            // Any live cells with two or three live neighbours survives.
+            if (cells[i] == alive && (liveN == 2 || liveN == 3)) {
+                next[i] = alive;
+            }
+            // Any dead cells with three live neighbours becomes a live cells.
+            else if (cells[i] == dead && liveN == 3) {
+                next[i] = alive;
+            }   
+            // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+            else if (cells[i] == alive) {
+                next[i] = dead;
+            }   
+            else {
+            next[i] = dead;
+            }
         }
 
+        
+
+        // now we copy the next generation into the current for display (see animate())
+
+        for (let i=0; i<next.length; i++){ 
+        cells[i]=next[i] 
+        } 
+
     }
-
-
 
     function resized(){
     let {innerWidth:width, innerHeight:height } = window //destructure window to get innerWidth into width ..etc
@@ -104,7 +147,7 @@
 
     randomFill() //randomly fill the grid with dead/alive cells
     
-}
+    }
 
 
     </script>
